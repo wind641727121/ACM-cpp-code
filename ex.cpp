@@ -1,49 +1,120 @@
-#include <iostream>
-#include <cmath>
-#include <cstring>
-#include <cstdlib>
 #include <cstdio>
-#include <algorithm>
-#include <vector>
+#include <cstring>
 #include <queue>
+#include <stack>
+#include <algorithm>
+#include<iostream>
 using namespace std;
-#define INF 0xfffffff
-#define maxn 1002
-
-int G[maxn][maxn];
-int dist[maxn][maxn];
-int m, n;
-void Floyd()
+#define maxn 100005
+#define maxm 200005
+int n,m;
+struct edge
 {
-    for(int k=1; k<=n; k++)
-    {
-        for(int i=1; i<=n; i++)
-        {
-            for(int j=1; j<=n; j++)
+    int dest;
+    long long dist;
+    struct edge*next;
+}e[maxm],*head[maxn];
+int pre[maxn];
+int cnt;
+inline void addedge(int u,int v,int w){
+    e[cnt].next=head[u];
+    e[cnt].dist=w;
+    e[cnt].dest=v;
+    head[u]=e+cnt++;
+}
+struct qnode
+{
+    int id;long long dist;
+    qnode(int i,long long d){id=i,dist=d;}
+    bool operator<(const struct qnode r)const{return dist>r.dist;}
+};
+bool vis[maxn];
+long long dist[maxn];
+void dijkstra(int src,int n)
+{
+    memset(vis,false,sizeof vis);
+    memset(dist,0x3f,sizeof dist);  ///inf
+    std::priority_queue<struct qnode>q;
+    dist[src]=0;q.push(qnode(src,0));
+    while(q.size()){
+        int u=q.top().id;q.pop();vis[u]=true;
+        for(struct edge*ptr=head[u];ptr;ptr=ptr->next){
+            int v=ptr->dest;
+            if(vis[v])continue;
+            long long w=ptr->dist;
+            if(dist[v]>dist[u]+w)
             {
-                G[i][j] = min(G[i][j], G[i][k] + G[k][j]);
+                dist[v]=dist[u]+w;
+                pre[v] = u;
+                q.push(qnode(v,dist[v]));
             }
         }
     }
 }
-void Init()
+void init()
 {
-    for(int i=0; i<=n; i++)
-    {
-        G[i][i] = 0;
-        for(int j=0; j<i; j++)
-            G[i][j] = G[j][i] = INF;
-    }
+	cnt = 0;
+	memset(head, 0, sizeof(head));
+	memset(pre, -1, sizeof(pre));
 }
-    int gcd(int a,int b)
-    {
-        while(b^=a^=b^=a%=b);
-        return a;
-    }
+void getMap()
+{
+	int a, b, c;
+	while(m--)
+	{
+		scanf("%d%d%d", &a, &b, &c);
+		addedge(a, b, c);
+	}
+}
+int  k;
+stack<int> path;
+ priority_queue <int,vector<int>,greater<int> > q;
 int main()
 {
-     char a[100];
-     scanf("%s",a);
-     cout<<12<<a<<12<<endl;
-    return 0;
+    int t;
+    while(scanf("%d",&t)!=EOF)
+    {
+    while(t--){
+  //  memset(wr,0,sizeof wr);
+	scanf("%d%d%d",&n, &m,&k);
+    init();
+    getMap();
+   dijkstra(1,n);
+  //  cout<<123<<endl;
+    path.push(n);
+    int now = pre[n];
+    while(1)
+    {
+        path.push(now);
+        if(now == 1)
+        break;
+        now = pre[now];
+    }
+    int last=1;
+    path.pop();
+    //cout<<dist[n]<<endl;
+    while(!path.empty())
+    {
+        for(struct edge*ptr=head[last];ptr;ptr=ptr->next)
+       {
+          cout<< "teste"<<" "<<path.top()<<endl;
+           if(path.top()==ptr->dest){
+                 cout<<last<<" "<<ptr->dest<<" "<<ptr->dist<<endl;
+                if(q.size()<k) q.push(ptr->dist);
+                else{
+                    if(ptr->dist>q.top()) {q.pop();q.push(ptr->dist);}
+                    else break;
+                }
+                break;
+           }
+       }
+       last=path.top();
+        path.pop();
+    }
+    while(!q.empty())
+        {dist[n]-=q.top();q.pop();}
+    cout<<dist[n]<<endl;
+		}
+	}
+	return 0;
 }
