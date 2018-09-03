@@ -14,18 +14,6 @@ using namespace std;
 #define bug3(g,i,k) cout<<"test: "<<g<<" "<<i<<" "<<k<<endl
 typedef long long ll;
 ll n,m,t,k;
-ll poww(ll a,ll b)
-{
-    ll ans=1,base=a;
-    while(b!=0)
-    {
-        if(b&1!=0)
-            ans=(ans*base);
-        base =(base*base);
-        b>>=1;
-    }
-    return ans;
-}
 priority_queue <int,vector<int>,greater<int> >a;
 int main()
 {
