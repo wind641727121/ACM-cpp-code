@@ -11,40 +11,19 @@
 #define inf 0x3f3f3f3f
 using namespace std;
 typedef long long ll;
-const ll MAXN=1e4+5;
-const ll mod=998244353;
-ll l[MAXN];
-ll r[MAXN];
-ll p[MAXN];
-ll fast_pow(ll a,ll b){
-    ll ans=1;
-    while (b){
-        if (b&1){
-            ans=(ans*a)%mod;
-        }
-        a=(a*a)%mod;
-        b>>=1;
-    }
-    return ans;
-}
-ll rev(ll a){
-    return fast_pow(a,mod-2);
-}
 int main(){
     std::ios::sync_with_stdio(0);
-    ll t,i,j,k,t1,t2,t3,n,m,rm,lm;
-    cin>>t;
-    while (t--){
-        ll a,b,c,d;
-        cin>>a>>b>>c>>d;
-        ll ans=0;
-        ans=fast_pow(2,a+b);
-        t1=fast_pow(2,a+c);
-        t1=(t1*(1+b+d))%mod;
-        ans=(ans+t1)%mod;
-        t1=fast_pow(2,a);
-        t1=(t1*(b+1))%mod;
-        ans=(ans+mod-t1)%mod;
-        cout<<ans<<'\n';
-    }
+    freopen("pi.txt","r",stdin);
+  //  freopen("ha.out","w",stdout);
+    ll n=0;
+    ll a[15]={0};
+    char c;
+    while(cin>>c)
+        ++n,++a[c-'0'];
+    cout<<"共小数点后 "<<n<<" 位："<<endl;
+    for(int i=0;i<10;i++)
+        cout<<"数字 "<<i<<"出现： "<<a[i]<<"次"<<endl;
+    getchar();
+    return 0;
+
 }
