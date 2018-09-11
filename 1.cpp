@@ -13,17 +13,8 @@ using namespace std;
 typedef long long ll;
 int main(){
     std::ios::sync_with_stdio(0);
-    freopen("pi.txt","r",stdin);
-  //  freopen("ha.out","w",stdout);
-    ll n=0;
-    ll a[15]={0};
-    char c;
-    while(cin>>c)
-        ++n,++a[c-'0'];
-    cout<<"共小数点后 "<<n<<" 位："<<endl;
-    for(int i=0;i<10;i++)
-        cout<<"数字 "<<i<<"出现： "<<a[i]<<"次"<<endl;
-    getchar();
-    return 0;
+   int a,b,c;
+   (a,b,c)=(1,2,3);
+   cout<<a<<" "<<b<<" "<<c<<endl;
 
 }

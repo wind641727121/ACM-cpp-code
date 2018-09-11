@@ -56,6 +56,7 @@ int main()
             }
              maxx=max(maxx,dp[i][j]);
         }
+        }
 
         mem(dp,0);
         for(int i =n;i>=1;i--)
