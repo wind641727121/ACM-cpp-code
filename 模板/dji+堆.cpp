@@ -1,77 +1,78 @@
 #include<bits/stdc++.h>
 using namespace std;
-#define maxn 10005
-#define maxm 500005
-#define INF  2147483647
-inline int read(){
-    int x=0,k=1; char c=getchar();
-    while(c<'0'||c>'9'){if(c=='-')k=-1;c=getchar();}
-    while(c>='0'&&c<='9')x=(x<<3)+(x<<1)+(c^48),c=getchar();
-    return x*k;
+#define maxn 100005
+#define maxm 200005
+struct edge{
+ int next,to,w;
+}a[maxm];
+int cnt=0,head[maxn];
+inline int read()
+{
+    int w=0,s=1;
+    char c;
+    c=getchar();
+    while(c<'0'||c>'9'){if(c=='-')s=-1;if(c==-1)exit(0);c=getchar();}
+    while(c<='9'&&c>='0'){w=w*10+c-'0';c=getchar();}
+    return w*s;
 }
-struct Edge
+inline void addedge(int u,int v,int w)
 {
-    int u,v,w,next;
-}e[maxm];
-int head[maxm],cnt,n,m,s,vis[maxn],dis[maxn];
-#define P pair<long long,int>
-priority_queue<P,vector<P>,greater<P> >q;
-//把最小的元素放在队首的优先队列
-inline void add(int u,int v,int w)
-{
-    e[++cnt].u=u;
-    //这句话对于此题不需要，但在缩点之类的问题还是有用的
-    e[cnt].v=v;
-    e[cnt].w=w;
-    e[cnt].next=head[u];
-    //存储该店的下一条边
-    head[u]=cnt;
-    //更新目前该点的最后一条边（就是这一条边）
+    a[++cnt].next=head[u];
+    a[cnt].to=v;
+    a[cnt].w=w;
+    head[u]=cnt ;
 }
-//链式前向星加边
-void dijkstra()
+bool vis[maxn];
+int dis[maxn];
+struct node {
+int p,d;
+node(int x=0,int y=0){p=x,d=y;}
+friend bool operator <(node a,node b){return a.d>b.d;}
+};
+priority_queue<node>q;
+int n,m,s;
+void dij()
 {
-    for(int i=1;i<=n;i++)
-    {
-        dis[i]=INF;
-    }
+
     dis[s]=0;
-    //赋初值
-    q.push(make_pair(0,s));
+    q.push(node(s,0));
     while(!q.empty())
-    //堆为空即为所有点都更新
     {
-        int x=q.top().second;
+        int u = q.top().p,w=q.top().d;
         q.pop();
-        //记录堆顶并将其弹出
-        if(!vis[x])
-        //没有遍历过才需要遍历
+        vis[u]=1;
+        if(dis[u]!=w)continue;
+        for(int i =head[u];i;i=a[i].next)
         {
-            vis[x]=1;
-            for(int i=head[x];i;i=e[i].next)
-            //搜索堆顶所有连边
+            int v =a[i].to;
+            if(vis[v])continue;
+            if(dis[v]>a[i].w+dis[u])
             {
-                int v=e[i].v;
-                dis[v]=min(dis[v],dis[x]+e[i].w);
-                //松弛操作
-                q.push(make_pair(dis[v],v));
+                dis[v]=a[i].w+dis[u];
+                q.push(node(v,dis[v]));
             }
         }
     }
 }
+
 int main()
 {
-    n=read(),m=read();s=read();
-    for(int i=1;i<=m;i++)
+    //ios::sync_with_stdio(0);
+    n=read();m=read();s=read();
+   // cin>>n>>m>>s;
+    memset(dis,0x3f,sizeof dis);
+    int a,b,c;
+    for(int i =0;i<m;i++)
     {
-        int x,y,z;
-        x=read(),y=read(),z=read();
-        add(x,y,z);
+         a=read(),b=read(),c=read();
+        addedge(a,b,c);
     }
-    dijkstra();
-    for(int i=1;i<=n;i++)
-    {
-        printf("%d ",dis[i]);
+    dij();
+    for(int i =1;i<=n;i++)
+    {printf("%d",dis[i]);
+        if(i!=n)printf(" ");
+        else printf("\n");
     }
     return 0;
+
 }
