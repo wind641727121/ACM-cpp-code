@@ -1,72 +1,49 @@
-#include<cstdio>
-#include<cstring>
-#include<cmath>
-#include<string>
-#include<iostream>
-#include<vector>
-#include<map>
-#include<set>
-#include<queue>
-#include<algorithm>
-using namespace std;
-#define bug(g) cout<<g<<endl
-typedef long long ll;
-int n;
-string s,p;
-int nex[10005];
-void makeNext()
-{
-    int q,k;
-    int m = p.size();
-    nex[0] = 0;
-    for (q = 1,k = 0; q < m; ++q)
-    {
-        while(k > 0 && p[q] != p[k])
-            k = nex[k-1];
-        if (p[q] == p[k])
-        {
-            k++;
+#include <cstdio>
+#include <cstring>
+const int N = 1010;
+char a[N], b[N];
+int next[N];
+int lena, lenb;
+
+void getFail() {
+    next[0] = -1;
+    int i = 0, j = -1;
+    while (i < lenb) {
+        if (j == -1 || b[i] == b[j]) {
+            i++; j++;
+            next[i] = j;
         }
-        nex[q] = k;
+        else j = next[j];
     }
 }
 
-int kmp()
-{
-    int ans=0;
-    int n,m;
-    int i,q;
-    n = s.size();
-    m = p.size();
-    makeNext();
-    for (i = 0,q = 0; i < n; ++i)
-    {
-        while(q > 0 && p[q] != s[i])
-            q = nex[q-1];
-        if (p[q] == s[i])
-        {
-            q++;
-        }
-        if (q == m)
-        {
-            ++ans;
-            q=0;
-        }
-    }
-    return ans;
-}
-int main()
-{
-    int t;
-    ios::sync_with_stdio(0);
-    while(cin>>s)
-    {
-        if(s=="#")break;
-            cin>>p;
-//            for(int i = 0; i<p.size(); i++)
-//                cout<<nex[i]<<endl;
-            cout<<kmp()<<endl;
-        }
+void init() {
+    lena = strlen(a);
+    lenb = strlen(b);
+    getFail();
 
+}
+
+void solve() {
+    int i = 0, j = 0, ans = 0;
+    while (i < lena) {
+        if (j == -1 || a[i] == b[j]) {
+            i++; j++;
+            if (j == lenb) {
+                ans++;
+                j = 0;
+            }
+        }
+        else j = next[j];
+    }
+    printf("%d\n", ans);
+}
+
+int main() {
+    while (scanf("%s", a) != EOF && a[0] != '#') {
+        scanf("%s", b);
+        init();
+        solve();
+    }
     return 0;
 }
